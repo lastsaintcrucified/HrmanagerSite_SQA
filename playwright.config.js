@@ -1,10 +1,12 @@
 // @ts-check
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
+dotenv.config();
 // import dotenv from 'dotenv';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
@@ -25,9 +27,9 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  timeout: 50 * 1000,
+  timeout: 10 * 1000,
   expect: {
-    timeout: 5000,
+    timeout: 10000,
   },
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -43,17 +45,17 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"], navigationTimeout: 15000 },
+      use: { ...devices["Desktop Chrome"] },
     },
 
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"], navigationTimeout: 15000 },
+      use: { ...devices["Desktop Firefox"] },
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"], navigationTimeout: 15000 },
+      use: { ...devices["Desktop Safari"] },
     },
   ],
 

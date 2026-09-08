@@ -1,0 +1,9 @@
+[
+  {
+    "USERNAME": "Admin",
+    "PASSWORD": "admin123",
+    "INVALID_USERNAME": "Admin1",
+    "INVALID_PASSWORD": "admin1234",
+    "LOGIN_ERROR_MESSAGE": "Invalid credentials"
+  }
+]
