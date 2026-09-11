@@ -1,0 +1,96 @@
+{
+  "info": {
+    "_postman_id": "7c70871e-c7c4-4d7d-836e-4becc86678ba",
+    "name": "Ostad Api Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16330835",
+    "_collection_link": "https://go.postman.co/collection/16330835-7c70871e-c7c4-4d7d-836e-4becc86678ba?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const responseData = pm.response.json();\nconst users = responseData;\n\nconst userId = users[0].id;\n\npm.collectionVariables.set(\"userId\", userId);\n\nconsole.log(\"Selected User ID:\", userId);\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response contains user data\", function () {\n    const jsonData = pm.response.json();\n\n    pm.expect(jsonData).to.be.an(\"array\");\n    pm.expect(jsonData.length).to.be.greaterThan(0);\n});\n\npm.test(\"Each user has id, name and email\", function () {\n    const jsonData = pm.response.json();\n    const users = jsonData;\n\n    users.forEach(function (user) {\n        pm.expect(user).to.have.property(\"id\");\n        pm.expect(user).to.have.property(\"name\");\n        pm.expect(user).to.have.property(\"email\");\n    });\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const randomNumber = Math.floor(Math.random() * 100000);\r\n\r\nconst newName = \"Towhid\" + randomNumber;\r\nconst newEmail = \"Towhid\" + randomNumber + \"@example.com\";\r\nconst newCompany = \"Ostad Company \" + randomNumber;\r\n\r\npm.variables.set(\"newName\", newName);\r\npm.variables.set(\"newEmail\", newEmail);\r\npm.variables.set(\"newCompany\", newCompany);\r\n\r\n\r\nconsole.log(\"Name:\", newName);\r\nconsole.log(\"Email:\", newEmail);\r\nconsole.log(\"Company:\", newCompany);\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code matches 200\", function () {\n    pm.response.to.have.status(200);\n});\n\nconst response = pm.response.json();\n\npm.test(\"Returned ID and stored ID are same\", function () {\n    pm.expect(response.id).to.eql(\n        Number(pm.collectionVariables.get(\"userId\"))\n    );\n});\npm.test(\"Phone field is not empty\", function () {\n    pm.expect(response.phone).to.exist;\n    pm.expect(response.phone).to.not.be.empty;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{    \r\n    \"name\": \"{{newName}}\",\r\n    \"email\": \"{{newEmail}}\",\r\n    \"company\": {\r\n        \"name\": \"{{newCompany}}\"\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{userId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    },
+    {
+      "key": "userId",
+      "value": 1
+    }
+  ]
+}
